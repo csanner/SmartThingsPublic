@@ -27,26 +27,13 @@ definition(
 
 preferences {
   page(name: "selectActions")
-  section("Which OSRAM Lightify Dimming Switch..."){
-    input(name: "switch1", type: "capability.button", title: "Which switch?", required: true)
-  }
-  section("Which routine for top button..."){
-    input(name: "targets", type: "capability.switch", title: "Which Target(s)?", required: true)
-  }
-  section("Which routine for bottom button..."){
-    input(name: "targets", type: "capability.switch", title: "Which Target(s)?", required: true)
-  }
-  section("Which routine for top button hold..."){
-    input(name: "upLevel", type: "number", range: "10..90", title: "Button 1 level?",  required: true)
-  }
-  section("Which routine for bottom button hold..."){
-    input(name: "downLevel", type: "number", range: "10..90", title: "Button 2 level?",  required: true)
-  }
-
 }
 
 def selectActions() {
-    dynamicPage(name: "selectActions", title: "Select Hello Home Action to Execute", install: true, uninstall: true) {
+    dynamicPage(name: "selectActions", title: "Select Routines to Execute", install: true, uninstall: true) {
+        section("Which OSRAM Lightify Dimming Switch..."){
+          input(name: "switch1", type: "capability.button", title: "Which switch?", required: true)
+        }
 
         // get the available actions
             def actions = location.helloHome?.getPhrases()*.label
@@ -56,7 +43,10 @@ def selectActions() {
                     section("Hello Home Actions") {
                             log.trace actions
                 // use the actions as the options for an enum input
-                input "action", "enum", title: "Select an action to execute", options: actions
+                input "up_press_action", "enum", title: "Select an action to execute", options: actions. required: true
+                input "down_press_action", "enum", title: "Select an action to execute", options: actions. required: true
+                input "up_hold_action", "enum", title: "Select an action to execute", options: actions
+                input "down_hold_action", "enum", title: "Select an action to execute", options: actions
                     }
             }
     }
@@ -83,12 +73,11 @@ def initialize() {
 def buttonPushedHandler(evt) {
   def buttonNumber = parseJson(evt.data)?.buttonNumber
   if (buttonNumber==1) {
-    log.debug "Button 1 pushed (on)"
-    targets.on()
-    targets.setLevel(100)
+    log.debug "Button 1 pushed (executing ${settings.up_press_action})"
+    location.helloHome?.execute(settings.up_press_action)
   } else {
-    log.debug "Button 2 pushed (off)"
-    targets.off()
+    log.debug "Button 2 pushed (executing ${settings.down_press_action})"
+    location.helloHome?.execute(settings.down_press_action)
   }
 }
 
@@ -99,11 +88,11 @@ def buttonHeldHandler(evt) {
   //def levelDirection = parseJson(evt.data)?.levelData[0]
   //def levelStep = parseJson(evt.data)?.levelData[1]
   if (buttonNumber==1) {
-    log.debug "Button 1 held (Setting brightness to $upLevel)"
-    targets.setLevel(upLevel)
+    log.debug "Button 1 held (executing ${settings.up_hold_action})"
+    location.helloHome?.execute(settings.up_hold_action)
   } else {
-    log.debug "Button 2 held (Setting brightness to $downLevel)"
-    targets.setLevel(downLevel)
+    log.debug "Button 2 held (executing ${settings.down_hold_action})"
+    location.helloHome?.execute(settings.down_hold_action)
   }
 }
 
