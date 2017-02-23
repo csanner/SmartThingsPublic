@@ -43,10 +43,10 @@ def selectActions() {
                     section("Hello Home Actions") {
                             log.trace actions
                 // use the actions as the options for an enum input
-                input "up_press_action", "enum", title: "Select an action to execute", options: actions, required: true
-                input "down_press_action", "enum", title: "Select an action to execute", options: actions, required: true
-                input "up_hold_action", "enum", title: "Select an action to execute", options: actions
-                input "down_hold_action", "enum", title: "Select an action to execute", options: actions
+                input "up_press_action", "enum", title: "Select an action for top button", options: actions, required: true
+                input "down_press_action", "enum", title: "Select an action for bottom button", options: actions, required: true
+                input "up_hold_action", "enum", title: "Select an action for top hold", options: actions
+                input "down_hold_action", "enum", title: "Select an action bottom hold", options: actions
                     }
             }
     }
