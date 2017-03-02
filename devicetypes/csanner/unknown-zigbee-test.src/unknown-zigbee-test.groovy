@@ -14,7 +14,7 @@
  *
  */
 metadata {
-  definition (name: "Unknown Zigbee Test Device", namespace: "pstuart", author: "Patrick Stuart") {
+  definition (name: "Unknown Zigbee Test Device", namespace: "csanner", author: "Patrick Stuart") {
     capability "Refresh"
   }
 

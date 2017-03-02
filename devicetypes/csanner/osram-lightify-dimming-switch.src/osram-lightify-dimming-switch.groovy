@@ -17,7 +17,7 @@
 */
 
 metadata {
-  definition (name: "OSRAM Lightify Dimming Switch", namespace: "motley74", author: "Michael Hudson") {
+  definition (name: "OSRAM Lightify Dimming Switch", namespace: "csanner", author: "Chris Sanner") {
     capability "Actuator"
     capability "Battery"
     capability "Button"
